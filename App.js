@@ -1,21 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, } from 'react-native';
+import { Home } from './screens/home';
+import { LinearGradient } from 'expo-linear-gradient';
+import { GameScreen } from './screens/gameScreen';
 
 export default function App() {
+  const [userNumber, setUserNumber] = useState()
+  const pickedNumberHandler = (pickedNumeber) => {
+    setUserNumber(pickedNumeber)
+  }
+
+  let screen = <Home pickNumber={pickedNumberHandler} />
+
+  if (userNumber) {
+    screen = <GameScreen numberPicked={userNumber} />
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <LinearGradient colors={["#ddb52f", '#ddb52f']} style={styles.viewContainer}>
+      {screen}
       <StatusBar style="auto" />
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  viewContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  }
 });
