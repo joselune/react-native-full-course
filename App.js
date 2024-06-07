@@ -4,21 +4,33 @@ import { Platform, SafeAreaView, StyleSheet, StatusBar as rnStatusBar } from 're
 import { Home } from './screens/home';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GameScreen } from './screens/gameScreen';
+import Colors from './constants/colors';
+import { GameOver } from './screens/gameOverScreen';
 
 export default function App() {
   const [userNumber, setUserNumber] = useState()
+  const [gameIsOver, setGameIsOVer] = useState(false)
   const pickedNumberHandler = (pickedNumeber) => {
     setUserNumber(pickedNumeber)
+    setGameIsOVer(false)
+  }
+
+  const setGameIsOVerValue = (isOver) => {
+    setGameIsOVer(isOver)
   }
 
   let screen = <Home pickNumber={pickedNumberHandler} />
 
   if (userNumber) {
-    screen = <GameScreen numberPicked={userNumber} />
+    screen = <GameScreen numberPicked={userNumber} gameOver={setGameIsOVerValue} />
+  }
+
+  if (gameIsOver && userNumber) {
+    screen = <GameOver />
   }
 
   return (
-    <LinearGradient colors={["#ddb52f", '#ddb52f']} style={styles.viewContainer}>
+    <LinearGradient colors={[Colors.primary700, '#ddb52f']} style={styles.viewContainer}>
       <SafeAreaView style={styles.AndroidSafeArea}>
         {screen}
       </SafeAreaView>
@@ -29,7 +41,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   viewContainer: {
-    flex: 1,
+    flex: 1
   },
   AndroidSafeArea: {
     paddingTop: Platform.OS === 'android' ? rnStatusBar.currentHeight : 0
